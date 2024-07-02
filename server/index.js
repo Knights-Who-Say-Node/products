@@ -21,7 +21,24 @@ app.get('/products/*/styles', (req, res) => {
   .catch((err) => {
     res.status(500).send(err);
   })
-})
+});
+app.get('/products/*/related', (req, res) => {
+  var id = '';
+  for (var i = req.url.length - 9; i > 0; i--) {
+    if (req.url.charAt(i) !== '/') {
+      id = req.url.charAt(i) + id;
+    } else {
+      break;
+    }
+  }
+  Product.find({id: id})
+  .then((results) => {
+    res.status(200).send(results[0].related);
+  })
+  .catch((err) => {
+    res.status(500).send(err);
+  })
+});
 app.get('/products/*', (req, res) => {
   var id = '';
   for (var i = req.url.length - 1; i > 0; i--) {
